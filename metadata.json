@@ -1,0 +1,6 @@
+{
+  "name": "Student Dashboard",
+  "description": "A clean, modern college student portal for tracking attendance, assignments, internal marks, weekly timetable, and student profile.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

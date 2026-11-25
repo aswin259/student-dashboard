@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+    <meta
+      name="description"
+      content="A clean, modern college student portal for tracking attendance, assignments, internal marks, weekly timetable, and student profile."
+    />
+    <meta property="og:title" content="Student Dashboard" />
+    <meta
+      property="og:description"
+      content="A clean, modern college student portal for tracking attendance, assignments, internal marks, weekly timetable, and student profile."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Clean geometric sans + monospace for tabular numbers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Separate beginner-friendly CSS file -->
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+
+    <!-- Main Portal Application Shell -->
+    <div id="app-shell" class="app-shell">
+      <!-- Left Sidebar Navigation -->
+      <aside id="sidebar" class="sidebar" aria-label="Primary navigation">
+        <div class="sidebar-brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+          </div>
+          <span class="brand-title">Student Dashboard</span>
+          <button
+            type="button"
+            id="close-sidebar-btn"
+            class="icon-btn mobile-only"
+            aria-label="Close navigation menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <nav class="sidebar-nav">
+          <ul class="nav-list">
+            <li>
+              <button type="button" class="nav-item active" data-section="dashboard" aria-current="page">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                </svg>
+                <span>Dashboard</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-section="profile">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>My Profile</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-section="attendance">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+                <span>Attendance</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-section="assignments">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                <span>Assignments</span>
+                <span id="sidebar-pending-count" class="nav-count" aria-label="Pending assignments count">3</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-section="marks">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                <span>Marks</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-item" data-section="timetable">
+                <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>Timetable</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button type="button" id="logout-nav-btn" class="nav-item nav-item-logout">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Workspace Column -->
+      <div class="workspace">
+        <!-- Top Header Bar -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              type="button"
+              id="open-sidebar-btn"
+              class="icon-btn mobile-only"
+              aria-label="Open navigation menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            <div class="breadcrumb" aria-label="Breadcrumb">
+              <span class="breadcrumb-root">Student Dashboard</span>
+              <span class="breadcrumb-sep" aria-hidden="true">/</span>
+              <span id="topbar-section-title" class="breadcrumb-current">Dashboard</span>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <button type="button" id="topbar-profile-btn" class="topbar-user-btn" aria-label="Open My Profile">
+              <div class="avatar-frame avatar-sm">
+                <img
+                  id="topbar-avatar-img"
+                  src="/src/assets/images/student_profile_avatar_1795618498716.jpg"
+                  alt="Ananya Krishnan portrait"
+                  referrerpolicy="no-referrer"
+                />
+                <span class="avatar-fallback" aria-hidden="true">AK</span>
+              </div>
+              <span id="topbar-student-name" class="topbar-user-name">Ananya Krishnan</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Main Content Area -->
+        <main class="main-content" id="main-content">
+          <!-- ==================== 1. DASHBOARD HOME ==================== -->
+          <section id="section-dashboard" class="page-section active" aria-labelledby="welcome-heading">
+            <div class="welcome-panel">
+              <div class="welcome-identity">
+                <div class="avatar-frame avatar-lg">
+                  <img
+                    id="welcome-avatar-img"
+                    src="/src/assets/images/student_profile_avatar_1795618498716.jpg"
+                    alt="Ananya Krishnan student ID photo"
+                    referrerpolicy="no-referrer"
+                  />
+                  <span class="avatar-fallback" aria-hidden="true">AK</span>
+                </div>
+                <div>
+                  <h1 id="welcome-heading" class="welcome-title">Welcome back, Ananya Krishnan</h1>
+                  <p id="welcome-meta" class="meta-line">
+                    <span class="mono-text">CS2023048</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>Computer Science &amp; Engineering</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>3rd Year</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>Semester 5</span>
+                  </p>
+                </div>
+              </div>
+              <div class="welcome-actions">
+                <button type="button" class="btn btn-secondary" data-goto="profile">View Profile</button>
+                <button type="button" class="btn btn-primary" data-goto="timetable">Weekly Timetable</button>
+              </div>
+            </div>
+
+            <!-- 4 Modern Dashboard Cards with Icons -->
+            <div class="stats-grid" aria-label="Academic summary metrics">
+              <button type="button" class="stat-card" data-goto="timetable">
+                <div class="stat-card-top">
+                  <span class="stat-label">Total Subjects</span>
+                  <div class="stat-icon-box" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                  </div>
+                </div>
+                <div id="stat-total-subjects" class="stat-value mono-num">6</div>
+                <div class="stat-subtext">5 Core &middot; 1 Elective</div>
+              </button>
+
+              <button type="button" class="stat-card" data-goto="attendance">
+                <div class="stat-card-top">
+                  <span class="stat-label">Attendance Percentage</span>
+                  <div class="stat-icon-box" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 11l3 3L22 4" />
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                    </svg>
+                  </div>
+                </div>
+                <div id="stat-attendance" class="stat-value mono-num">87.4%</div>
+                <div id="stat-attendance-sub" class="stat-subtext mono-num">166 / 190 classes attended</div>
+              </button>
+
+              <button type="button" class="stat-card" data-goto="assignments">
+                <div class="stat-card-top">
+                  <span class="stat-label">Pending Assignments</span>
+                  <div class="stat-icon-box" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                </div>
+                <div id="stat-pending-assignments" class="stat-value mono-num">3</div>
+                <div id="stat-assignments-sub" class="stat-subtext">4 of 7 completed</div>
+              </button>
+
+              <button type="button" class="stat-card" data-goto="marks">
+                <div class="stat-card-top">
+                  <span class="stat-label">Overall Marks</span>
+                  <div class="stat-icon-box" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10" />
+                      <line x1="12" y1="20" x2="12" y2="4" />
+                      <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                  </div>
+                </div>
+                <div id="stat-overall-marks" class="stat-value mono-num">87.7%</div>
+                <div id="stat-marks-sub" class="stat-subtext mono-num">526 / 600 internal total</div>
+              </button>
+            </div>
+
+            <!-- Balanced 2-Column Home Overview -->
+            <div class="home-split-grid">
+              <!-- Pending Assignments Quick Panel -->
+              <article class="panel">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="panel-title">Upcoming Assignments</h2>
+                    <p class="panel-subtitle">Due submissions across Semester 5 courses</p>
+                  </div>
+                  <button type="button" class="text-link" data-goto="assignments">View all</button>
+                </div>
+                <div id="home-assignments-list" class="clean-list"></div>
+              </article>
+
+              <!-- Student Info & Today's Classes Panel -->
+              <article class="panel">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="panel-title">Today's Classes</h2>
+                    <p id="home-today-label" class="panel-subtitle">Wednesday schedule</p>
+                  </div>
+                  <button type="button" class="text-link" data-goto="timetable">Full week</button>
+                </div>
+                <div id="home-schedule-list" class="clean-list"></div>
+
+                <div class="panel-divider"></div>
+
+                <div class="quick-profile-strip">
+                  <div class="quick-profile-item">
+                    <span class="field-label">Register Number</span>
+                    <span id="home-reg-no" class="field-value mono-text">CS2023048</span>
+                  </div>
+                  <div class="quick-profile-item">
+                    <span class="field-label">Faculty Advisor</span>
+                    <span id="home-advisor" class="field-value">Dr. Rajeshwari Menon</span>
+                  </div>
+                  <div class="quick-profile-item">
+                    <span class="field-label">Email</span>
+                    <span id="home-email" class="field-value">ananya.krishnan@northbridge.edu</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================== 2. MY PROFILE ==================== -->
+          <section id="section-profile" class="page-section" aria-labelledby="profile-heading" hidden>
+            <div class="section-head">
+              <div>
+                <h1 id="profile-heading" class="section-title">My Profile</h1>
+                <p class="section-subtitle">Official student enrollment and contact records</p>
+              </div>
+              <button type="button" id="toggle-edit-profile-btn" class="btn btn-secondary">
+                Edit Contact Info
+              </button>
+            </div>
+
+            <article class="panel profile-panel">
+              <div class="profile-hero">
+                <div class="avatar-frame avatar-xl">
+                  <img
+                    id="profile-avatar-img"
+                    src="/src/assets/images/student_profile_avatar_1795618498716.jpg"
+                    alt="Ananya Krishnan student profile photo"
+                    referrerpolicy="no-referrer"
+                  />
+                  <span class="avatar-fallback" aria-hidden="true">AK</span>
+                </div>
+                <div class="profile-hero-info">
+                  <h2 id="profile-display-name" class="profile-name">Ananya Krishnan</h2>
+                  <p class="meta-line">
+                    <span id="profile-display-dept">Computer Science &amp; Engineering</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <span id="profile-display-reg" class="mono-text">CS2023048</span>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>Academic Session 2026–2027</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="panel-divider"></div>
+
+              <!-- Structured Profile Details Grid -->
+              <dl class="profile-details-grid">
+                <div class="detail-row">
+                  <dt class="field-label">Student Name</dt>
+                  <dd id="profile-name" class="field-value">Ananya Krishnan</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Register Number</dt>
+                  <dd id="profile-reg" class="field-value mono-text">CS2023048</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Department</dt>
+                  <dd id="profile-department" class="field-value">Computer Science &amp; Engineering</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Year</dt>
+                  <dd id="profile-year" class="field-value">3rd Year</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Semester</dt>
+                  <dd id="profile-semester" class="field-value">Semester 5</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Email Address</dt>
+                  <dd id="profile-email" class="field-value">ananya.krishnan@northbridge.edu</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Phone Number</dt>
+                  <dd id="profile-phone" class="field-value mono-text">+91 98402 61734</dd>
+                </div>
+                <div class="detail-row">
+                  <dt class="field-label">Faculty Advisor</dt>
+                  <dd id="profile-advisor" class="field-value">Dr. Rajeshwari Menon</dd>
+                </div>
+              </dl>
+
+              <!-- Inline Edit Contact Form (Hidden until Edit clicked) -->
+              <form id="profile-edit-form" class="inline-form" hidden>
+                <div class="panel-divider"></div>
+                <h3 class="subsection-title">Update Contact Details</h3>
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="edit-email-input">Email Address</label>
+                    <input type="email" id="edit-email-input" required />
+                  </div>
+                  <div class="form-field">
+                    <label for="edit-phone-input">Phone Number</label>
+                    <input type="tel" id="edit-phone-input" required />
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                  <button type="button" id="cancel-edit-profile-btn" class="btn btn-secondary">Cancel</button>
+                </div>
+              </form>
+
+              <p id="profile-feedback" class="inline-feedback" role="status" aria-live="polite" hidden></p>
+            </article>
+          </section>
+
+          <!-- ==================== 3. ATTENDANCE ==================== -->
+          <section id="section-attendance" class="page-section" aria-labelledby="attendance-heading" hidden>
+            <div class="section-head">
+              <div>
+                <h1 id="attendance-heading" class="section-title">Attendance</h1>
+                <p class="section-subtitle">Subject-wise class attendance record (minimum 75% required)</p>
+              </div>
+              <div class="segmented-control" role="group" aria-label="Filter attendance">
+                <button type="button" class="seg-btn active" data-attendance-filter="all">All Subjects</button>
+                <button type="button" class="seg-btn" data-attendance-filter="good">Good (&ge;80%)</button>
+                <button type="button" class="seg-btn" data-attendance-filter="low">Needs Focus (&lt;80%)</button>
+              </div>
+            </div>
+
+            <!-- Overall Attendance Summary Strip -->
+            <div class="summary-strip">
+              <div class="summary-metric">
+                <span class="field-label">Overall Attendance</span>
+                <span id="attendance-overall-pct" class="summary-big mono-num">87.4%</span>
+              </div>
+              <div class="summary-metric">
+                <span class="field-label">Classes Attended</span>
+                <span id="attendance-total-classes" class="summary-big mono-num">166 / 190</span>
+              </div>
+              <div class="summary-metric">
+                <span class="field-label">Eligibility Status</span>
+                <span id="attendance-eligibility" class="summary-big status-good">Eligible for Exams</span>
+              </div>
+            </div>
+
+            <!-- Subject-Wise Attendance Progress Bars -->
+            <article class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">Subject-wise Breakdown</h2>
+                <span id="attendance-count-note" class="meta-text">Showing 6 subjects</span>
+              </div>
+              <div id="attendance-list" class="attendance-list"></div>
+            </article>
+          </section>
+
+          <!-- ==================== 4. ASSIGNMENTS ==================== -->
+          <section id="section-assignments" class="page-section" aria-labelledby="assignments-heading" hidden>
+            <div class="section-head">
+              <div>
+                <h1 id="assignments-heading" class="section-title">Assignments</h1>
+                <p class="section-subtitle">Track coursework deadlines and mark completed submissions</p>
+              </div>
+              <div class="section-controls">
+                <div class="segmented-control" role="group" aria-label="Filter assignments by status">
+                  <button type="button" class="seg-btn active" data-assignment-filter="all">All</button>
+                  <button type="button" class="seg-btn" data-assignment-filter="Pending">Pending</button>
+                  <button type="button" class="seg-btn" data-assignment-filter="Completed">Completed</button>
+                </div>
+                <button type="button" id="toggle-add-assignment-btn" class="btn btn-primary">
+                  Add Assignment
+                </button>
+              </div>
+            </div>
+
+            <!-- Add New Assignment Form -->
+            <article id="add-assignment-panel" class="panel add-form-panel" hidden>
+              <form id="add-assignment-form">
+                <div class="panel-header">
+                  <h2 class="panel-title">New Assignment</h2>
+                </div>
+                <div class="form-grid form-grid-3">
+                  <div class="form-field">
+                    <label for="new-assignment-title">Assignment Name</label>
+                    <input
+                      type="text"
+                      id="new-assignment-title"
+                      placeholder="e.g. Graph Traversal Lab Report"
+                      required
+                    />
+                  </div>
+                  <div class="form-field">
+                    <label for="new-assignment-subject">Subject</label>
+                    <select id="new-assignment-subject" required>
+                      <option value="Data Structures & Algorithms">Data Structures &amp; Algorithms</option>
+                      <option value="Database Management Systems">Database Management Systems</option>
+                      <option value="Operating Systems">Operating Systems</option>
+                      <option value="Computer Networks">Computer Networks</option>
+                      <option value="Software Engineering">Software Engineering</option>
+                      <option value="Web Technologies">Web Technologies</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label for="new-assignment-date">Submission Date</label>
+                    <input type="date" id="new-assignment-date" required />
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save Assignment</button>
+                  <button type="button" id="cancel-add-assignment-btn" class="btn btn-secondary">Cancel</button>
+                </div>
+              </form>
+            </article>
+
+            <!-- Assignments Table Panel -->
+            <article class="panel">
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Assignment Name</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Submission Date</th>
+                      <th scope="col">Status</th>
+                      <th scope="col" class="col-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="assignments-tbody"></tbody>
+                </table>
+              </div>
+              <div id="assignments-empty" class="empty-state" hidden>
+                <p>No assignments match the selected filter.</p>
+                <button type="button" id="reset-assignment-filter-btn" class="btn btn-secondary">
+                  Show All Assignments
+                </button>
+              </div>
+            </article>
+          </section>
+
+          <!-- ==================== 5. MARKS ==================== -->
+          <section id="section-marks" class="page-section" aria-labelledby="marks-heading" hidden>
+            <div class="section-head">
+              <div>
+                <h1 id="marks-heading" class="section-title">Marks</h1>
+                <p class="section-subtitle">Semester 5 internal assessment breakdown and overall score</p>
+              </div>
+              <div class="segmented-control" role="group" aria-label="Sort marks">
+                <button type="button" class="seg-btn active" data-marks-sort="default">By Code</button>
+                <button type="button" class="seg-btn" data-marks-sort="high">Highest First</button>
+                <button type="button" class="seg-btn" data-marks-sort="low">Lowest First</button>
+              </div>
+            </div>
+
+            <!-- Overall Marks Summary Strip -->
+            <div class="summary-strip">
+              <div class="summary-metric">
+                <span class="field-label">Total Marks</span>
+                <span id="marks-total-display" class="summary-big mono-num">526 / 600</span>
+              </div>
+              <div class="summary-metric">
+                <span class="field-label">Average Percentage</span>
+                <span id="marks-avg-display" class="summary-big mono-num">87.7%</span>
+              </div>
+              <div class="summary-metric">
+                <span class="field-label">Academic Standing</span>
+                <span id="marks-standing-display" class="summary-big status-good">Distinction</span>
+              </div>
+            </div>
+
+            <!-- Marks Table -->
+            <article class="panel">
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Code</th>
+                      <th scope="col">Subject Name</th>
+                      <th scope="col" class="col-right">Test 1 (25)</th>
+                      <th scope="col" class="col-right">Test 2 (25)</th>
+                      <th scope="col" class="col-right">Lab / Internal (50)</th>
+                      <th scope="col" class="col-right">Total (100)</th>
+                      <th scope="col" class="col-right">Grade</th>
+                    </tr>
+                  </thead>
+                  <tbody id="marks-tbody"></tbody>
+                  <tfoot id="marks-tfoot"></tfoot>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <!-- ==================== 6. TIMETABLE ==================== -->
+          <section id="section-timetable" class="page-section" aria-labelledby="timetable-heading" hidden>
+            <div class="section-head">
+              <div>
+                <h1 id="timetable-heading" class="section-title">Timetable</h1>
+                <p class="section-subtitle">Weekly class schedule for Semester 5 &middot; Section A</p>
+              </div>
+              <div class="segmented-control timetable-tabs" role="group" aria-label="Select day of week">
+                <button type="button" class="seg-btn active" data-day-filter="All">Full Week</button>
+                <button type="button" class="seg-btn" data-day-filter="Monday">Mon</button>
+                <button type="button" class="seg-btn" data-day-filter="Tuesday">Tue</button>
+                <button type="button" class="seg-btn" data-day-filter="Wednesday">Wed</button>
+                <button type="button" class="seg-btn" data-day-filter="Thursday">Thu</button>
+                <button type="button" class="seg-btn" data-day-filter="Friday">Fri</button>
+              </div>
+            </div>
+
+            <div id="timetable-container" class="timetable-grid"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- ==================== LOGOUT CONFIRMATION MODAL ==================== -->
+    <div id="logout-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="logout-modal-title" hidden>
+      <div class="modal-card">
+        <h2 id="logout-modal-title" class="modal-title">Sign out of Student Dashboard?</h2>
+        <p class="modal-body">
+          You can sign back in anytime to continue viewing your attendance, assignments, marks, and timetable.
+        </p>
+        <div class="modal-actions">
+          <button type="button" id="cancel-logout-btn" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="confirm-logout-btn" class="btn btn-primary">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SIGNED-OUT SCREEN ==================== -->
+    <div id="signed-out-screen" class="signed-out-screen" hidden>
+      <div class="signed-out-card">
+        <div class="brand-mark brand-mark-lg" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+        </div>
+        <h1 class="signed-out-title">You have signed out</h1>
+        <p class="signed-out-text">
+          Session ended for <strong id="signed-out-student-name">Ananya Krishnan</strong> (<span class="mono-text">CS2023048</span>).
+        </p>
+        <button type="button" id="sign-back-in-btn" class="btn btn-primary">Sign Back In</button>
+      </div>
+    </div>
+
+    <!-- Separate beginner-friendly JavaScript file -->
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
